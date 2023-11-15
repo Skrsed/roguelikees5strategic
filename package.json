@@ -1,0 +1,35 @@
+{
+  "name": "roguelikees5strategic",
+  "version": "0.0.1",
+  "description": "Roguelike game using es5 with only determine time",
+  "source": "src/index.html",
+  "scripts": {
+    "dev": "parcel",
+    "build": "parcel build",
+    "test": "test"
+  },
+  "alias": {
+    "images": "./assets/images/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/konstantinUnicorn/roguelikees5strategic.git"
+  },
+  "keywords": [
+    "roguelike",
+    "es5",
+    "determine",
+    "game",
+    "dnd",
+    "adventure"
+  ],
+  "author": "k.zelenin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/konstantinUnicorn/roguelikees5strategic/issues"
+  },
+  "homepage": "https://github.com/konstantinUnicorn/roguelikees5strategic#readme",
+  "devDependencies": {
+    "parcel": "^2.10.2"
+  }
+}
