@@ -1,64 +1,37 @@
-const matrix = [
-    ["A", "A", "A", "B", "A"],
-    ["B", "B", "B", "B", "B"],
-    ["A", "B", "A", "A", "A"],
-    ["A", "B", "B", "B", "B"],
-    ["A", "A", "A", "A", "A"]
-];
+function findWay(position, end, matrix) {
+    var queue = [];
 
-let successors = (root, m) => {
-    let connectedCells = [
-        [root[0] - 1, root[1]],
-        [root[0], root[1] - 1],
-        [root[0] + 1, root[1]],
-        [root[0], root[1] + 1]
-    ];
+    matrix[position[0]][position[1]] = 1;
+    queue.push([position]); // store a path, not just a position
 
-    const validCells = connectedCells.filter(
-        (cell) =>
-            cell[0] >= 0 &&
-            cell[0] < m.length &&
-            cell[1] >= 0 &&
-            cell[1] < m[0].length
-    );
+    while (queue.length > 0) {
+        var path = queue.shift(); // get the path out of the queue
+        var pos = path[path.length - 1]; // ... and then the last position from it
+        var direction = [
+            [pos[0] + 1, pos[1]],
+            [pos[0], pos[1] + 1],
+            [pos[0] - 1, pos[1]],
+            [pos[0], pos[1] - 1]
+        ];
 
-    const successors = validCells.filter(
-        (cell) => m[cell[0]][cell[1]] !== m[root[0]][root[1]]
-    );
-
-    return successors;
-};
-
-const buildPath = (traversalTree, to) => {
-    let path = [to];
-    let parent = traversalTree[to];
-    while (parent) {
-        path.push(parent);
-        parent = traversalTree[parent];
-    }
-    return path.reverse();
-};
-
-const bfs = (from, to, m) => {
-    let traversalTree = [];
-    let visited = new Set();
-    let queue = [];
-    queue.push(from);
-
-    while (queue.length) {
-        let subtreeRoot = queue.shift();
-        visited.add(subtreeRoot.toString());
-
-        if (subtreeRoot.toString() == to.toString())
-            return buildPath(traversalTree, to);
-
-        for (var child of successors(subtreeRoot, m)) {
-            if (!visited.has(child.toString())) {
-                traversalTree[child] = subtreeRoot;
-                queue.push(child);
+        for (var i = 0; i < direction.length; i++) {
+            // Perform this check first:
+            if (direction[i][0] == end[0] && direction[i][1] == end[1]) {
+                // return the path that led to the find
+                return path.concat([end]);
             }
+
+            if (direction[i][0] < 0 || direction[i][0] >= matrix.length
+                || direction[i][1] < 0 || direction[i][1] >= matrix[0].length
+                || matrix[direction[i][0]][direction[i][1]] != 0) {
+                continue;
+            }
+
+            matrix[direction[i][0]][direction[i][1]] = 1;
+            // extend and push the path on the queue
+            queue.push(path.concat([direction[i]]));
         }
     }
-};
+}
 
-module.exports = bfs
+module.exports = findWay

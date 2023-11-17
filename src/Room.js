@@ -1,17 +1,17 @@
-function Room(matrix) {
+function Room(matrix, x = null, y = null) {
     this.vSize = randomIntFromInterval(3, 8)
     this.hSize = randomIntFromInterval(3, 8)
 
-    this.x = randomIntFromInterval(0, matrix.length - this.vSize)
-    this.y = randomIntFromInterval(0, matrix[0].length - this.hSize)
+    this.x = x ?? randomIntFromInterval(0, matrix[0].length - this.vSize)
+    this.y = y ?? randomIntFromInterval(0, matrix.length - this.hSize)
 
-    console.log({ x: this.x, y: this.y })
-    console.log({ v: this.vSize, h: this.hSize })
 
-    for (var i = 0; i <= this.vSize; i++) {
-        for (var j = 0; j <= this.hSize; j++) {
-            if (i >= 0 && i < this.vSize && j >= 0 && j < this.hSize) {
-                matrix[i + this.x][j + this.y] = 0
+    for (var i = 0; i < this.hSize; i++) {
+        for (var j = 0; j < this.vSize; j++) {
+            if (j >= 0 && j < this.vSize && i >= 0 && i < this.hSize) {
+                console.log({ m: matrix, x: i + this.y, y: j + this.x })
+
+                matrix[i + this.y][j + this.x] = 0
                 continue
             }
 
@@ -19,56 +19,58 @@ function Room(matrix) {
         }
     }
 
-    var vertcalWallsCount = randomIntFromInterval(3, Math.min(5, this.vSize))
-    var verticalWalls = []
-    while (verticalWalls.length !== vertcalWallsCount) {
-        i = randomIntFromInterval(this.x, this.x + this.vSize)
-        if (verticalWalls.includes(i)) {
-            console.log("continue")
+    var verticalPassesCount = randomIntFromInterval(3, Math.min(5, this.vSize))
+    var verticalPasses = []
+    while (verticalPasses.length !== verticalPassesCount) {
+        var passVIndex = randomIntFromInterval(this.x, this.x + this.vSize - 1)
+        if (verticalPasses.includes(passVIndex)) {
             continue
         }
+        verticalPasses.push(passVIndex)
 
-        console.log("push")
+        for (var i = this.y - 1; i >= 0; i--) {
+            if (matrix[i][passVIndex] === 0) {
+                break
+            }
 
-        verticalWalls.push(i)
-        for (i = 0; i < matrix.length; i++) {
-            if (i > this.x && i < this.vSize + 1) {
-                continue
+            matrix[i][passVIndex] = 0
+        }
+
+        for (var i = this.hSize + this.y; i < matrix.length; i++) {
+            if (matrix[i][passVIndex] === 0) {
+                break
             }
-            if (matrix[i][j] === 0) {
-                break;
-            }
-            matrix[i][j] = 0
+
+            matrix[i][passVIndex] = 0
         }
     }
 
-    console.log({ matrix })
+    var horizontalPassesCount = randomIntFromInterval(3, Math.min(5, this.hSize))
+    var horizontalPasses = []
+    while (horizontalPasses.length !== horizontalPassesCount) {
+        var passHIndex = randomIntFromInterval(this.y, this.y + this.hSize - 1)
+        if (horizontalPasses.includes(passHIndex)) {
+            console.log('continue', { hz: this.hSize, horizontalPassesCount, horizontalPasses })
+            continue
+        }
+        horizontalPasses.push(passHIndex)
 
-    // varticalWalls = vertcalWalls.slice(1, vertcalWalls.length - 2)
+        for (var i = this.x - 1; i >= 0; i--) {
+            if (matrix[passHIndex][i] === 0) {
+                break
+            }
 
-    // console.log({ vertcalWalls })
+            matrix[passHIndex][i] = 0
+        }
 
-    // var vertacalEntrancesC = randomIntFromInterval(1, 4)
-    // var horizontalEntrances = randomIntFromInterval(1, 4)
+        for (var i = this.vSize + this.x; i < matrix[0].length; i++) {
+            if (matrix[passHIndex][i] === 0) {
+                break
+            }
 
-    // vEntrances = []
-
-    // while (vEntrances.length !== vertacalEntrancesC) {
-    //     var makeAHole = randomIntFromInterval(0, vertcalWalls.length - 1)
-    //     console.log(makeAHole)
-    //     var row = vertcalWalls[makeAHole][0]
-    //     var col = vertcalWalls[makeAHole][1]
-    //     res[row][col] = 0
-    //     vEntrances.push([row, col])
-
-    //     vertcalWalls = vertcalWalls.filter(function (_, index) {
-    //         return index !== makeAHole
-    //     })
-    // }
-
-    // console.log(res)
-    // console.log(vEntrances)
-
+            matrix[passHIndex][i] = 0
+        }
+    }
 }
 
 function randomIntFromInterval(min, max) { // min and max included 

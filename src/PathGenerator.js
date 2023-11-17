@@ -20,7 +20,7 @@ PathGenerator.prototype.store = function (path) {
             return;
         }
     }
-    console.log(respath);
+    //console.log(respath);
 }
 
 PathGenerator.prototype.findPaths = function (matrix, startX, startY, endX, endY) {
